@@ -1,11 +1,19 @@
 {
   "name": "@enzoferey/network-gas-price",
   "version": "0.1.2",
+  "license": "MIT",
   "homepage": "https://github.com/enzoferey/network-gas-price",
   "repository": {
     "type": "git",
     "url": "https://github.com/enzoferey/network-gas-price.git"
   },
+  "keywords": [
+    "ethereum",
+    "polygon",
+    "blockchain",
+    "gas-price",
+    "gas-fees"
+  ],
   "type": "module",
   "files": [
     "dist"
