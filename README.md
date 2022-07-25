@@ -9,7 +9,7 @@ Query accurate gas prices on every blockchain network ⛽️
 ## Highlights
 
 - Zero dependencies 🧹
-- Lightweight (0.75 KiB gzipped) 📦
+- Lightweight (749 bytes gzipped) 📦
 - Simple to use ⚡️
 - Ethereum and Polygon networks 🚀
 
