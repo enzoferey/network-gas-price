@@ -5,6 +5,7 @@ import { mockFetch } from "./mockFetch";
 import {
   GAS_STATION_URL_BY_NETWORK,
   DEFAULT_FALLBACK_GAS_PRICE,
+  ASAP_PERCENTAGE,
   getPolygonGasPrice,
 } from "../getPolygonGasPrice";
 
@@ -47,6 +48,10 @@ describe("getPolygonGasPrice", () => {
         maxPriorityFeePerGas: fastGasPrice,
         maxFeePerGas: fastGasPrice,
       },
+      asap: {
+        maxPriorityFeePerGas: (fastGasPrice * ASAP_PERCENTAGE) / 100,
+        maxFeePerGas: (fastGasPrice * ASAP_PERCENTAGE) / 100,
+      },
     });
   });
   it("should return the Mumbai gas prices per level based on the Polygon gas station", async () => {
@@ -87,6 +92,10 @@ describe("getPolygonGasPrice", () => {
         maxPriorityFeePerGas: fastGasPrice,
         maxFeePerGas: fastGasPrice,
       },
+      asap: {
+        maxPriorityFeePerGas: (fastGasPrice * ASAP_PERCENTAGE) / 100,
+        maxFeePerGas: (fastGasPrice * ASAP_PERCENTAGE) / 100,
+      },
     });
   });
   it("should return the fallback gas price if there an issue fetching from the Polygon gas station", async () => {
@@ -107,6 +116,10 @@ describe("getPolygonGasPrice", () => {
         maxPriorityFeePerGas: DEFAULT_FALLBACK_GAS_PRICE,
         maxFeePerGas: DEFAULT_FALLBACK_GAS_PRICE,
       },
+      asap: {
+        maxPriorityFeePerGas: DEFAULT_FALLBACK_GAS_PRICE,
+        maxFeePerGas: DEFAULT_FALLBACK_GAS_PRICE,
+      },
     });
 
     const fallbackGasPrice = 100;
@@ -124,6 +137,10 @@ describe("getPolygonGasPrice", () => {
         maxFeePerGas: fallbackGasPrice,
       },
       high: {
+        maxPriorityFeePerGas: fallbackGasPrice,
+        maxFeePerGas: fallbackGasPrice,
+      },
+      asap: {
         maxPriorityFeePerGas: fallbackGasPrice,
         maxFeePerGas: fallbackGasPrice,
       },

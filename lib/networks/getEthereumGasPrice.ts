@@ -9,6 +9,7 @@ export const GAS_STATION_URL_BY_NETWORK: Record<EthereumNetwork, string> = {
 };
 
 export const DEFAULT_FALLBACK_GAS_PRICE = 80;
+export const ASAP_PERCENTAGE = 120; // 120%
 
 interface ResponseEthereumGasPrice {
   result: {
@@ -51,6 +52,14 @@ export async function getEthereumGasPrice(
         maxPriorityFeePerGas: responseEthereumGasPrice.result.FastGasPrice,
         maxFeePerGas: responseEthereumGasPrice.result.FastGasPrice,
       },
+      asap: {
+        maxPriorityFeePerGas:
+          (responseEthereumGasPrice.result.FastGasPrice * ASAP_PERCENTAGE) /
+          100,
+        maxFeePerGas:
+          (responseEthereumGasPrice.result.FastGasPrice * ASAP_PERCENTAGE) /
+          100,
+      },
     };
   } catch (error) {
     return {
@@ -63,6 +72,10 @@ export async function getEthereumGasPrice(
         maxFeePerGas: fallbackGasPrice,
       },
       high: {
+        maxPriorityFeePerGas: fallbackGasPrice,
+        maxFeePerGas: fallbackGasPrice,
+      },
+      asap: {
         maxPriorityFeePerGas: fallbackGasPrice,
         maxFeePerGas: fallbackGasPrice,
       },

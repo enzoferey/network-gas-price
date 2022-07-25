@@ -6,6 +6,7 @@ export const GAS_STATION_URL_BY_NETWORK: Record<PolygonNetwork, string> = {
 };
 
 export const DEFAULT_FALLBACK_GAS_PRICE = 50;
+export const ASAP_PERCENTAGE = 120; // 120%
 
 interface ResponsePolygonGasPrice {
   safeLow: {
@@ -54,6 +55,12 @@ export async function getPolygonGasPrice(
         maxPriorityFeePerGas: responsePolygonGasPrice.fast.maxPriorityFee,
         maxFeePerGas: responsePolygonGasPrice.fast.maxPriorityFee,
       },
+      asap: {
+        maxPriorityFeePerGas:
+          (responsePolygonGasPrice.fast.maxPriorityFee * ASAP_PERCENTAGE) / 100,
+        maxFeePerGas:
+          (responsePolygonGasPrice.fast.maxPriorityFee * ASAP_PERCENTAGE) / 100,
+      },
     };
   } catch (error) {
     return {
@@ -66,6 +73,10 @@ export async function getPolygonGasPrice(
         maxFeePerGas: fallbackGasPrice,
       },
       high: {
+        maxPriorityFeePerGas: fallbackGasPrice,
+        maxFeePerGas: fallbackGasPrice,
+      },
+      asap: {
         maxPriorityFeePerGas: fallbackGasPrice,
         maxFeePerGas: fallbackGasPrice,
       },

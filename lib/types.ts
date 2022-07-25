@@ -12,6 +12,7 @@ export interface GasPrice {
   low: GasPriceLevel;
   average: GasPriceLevel;
   high: GasPriceLevel;
+  asap: GasPriceLevel;
 }
 
 export interface Options {

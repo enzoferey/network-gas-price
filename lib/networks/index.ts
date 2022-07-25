@@ -1,2 +1,2 @@
-export * from "./getEthereumGasPrice";
-export * from "./getPolygonGasPrice";
+export { getEthereumGasPrice } from "./getEthereumGasPrice";
+export { getPolygonGasPrice } from "./getPolygonGasPrice";

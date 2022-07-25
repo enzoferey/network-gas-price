@@ -5,6 +5,7 @@ import { mockFetch } from "./mockFetch";
 import {
   GAS_STATION_URL_BY_NETWORK,
   DEFAULT_FALLBACK_GAS_PRICE,
+  ASAP_PERCENTAGE,
   getEthereumGasPrice,
 } from "../getEthereumGasPrice";
 
@@ -40,6 +41,10 @@ describe("getEthereumGasPrice", () => {
         maxPriorityFeePerGas: fastGasPrice,
         maxFeePerGas: fastGasPrice,
       },
+      asap: {
+        maxPriorityFeePerGas: (fastGasPrice * ASAP_PERCENTAGE) / 100,
+        maxFeePerGas: (fastGasPrice * ASAP_PERCENTAGE) / 100,
+      },
     });
   });
   it("should return the Rinkeby gas prices per level based on the Ethereum gas station", async () => {
@@ -72,6 +77,10 @@ describe("getEthereumGasPrice", () => {
       high: {
         maxPriorityFeePerGas: fastGasPrice,
         maxFeePerGas: fastGasPrice,
+      },
+      asap: {
+        maxPriorityFeePerGas: (fastGasPrice * ASAP_PERCENTAGE) / 100,
+        maxFeePerGas: (fastGasPrice * ASAP_PERCENTAGE) / 100,
       },
     });
   });
@@ -113,6 +122,10 @@ describe("getEthereumGasPrice", () => {
         maxPriorityFeePerGas: DEFAULT_FALLBACK_GAS_PRICE,
         maxFeePerGas: DEFAULT_FALLBACK_GAS_PRICE,
       },
+      asap: {
+        maxPriorityFeePerGas: DEFAULT_FALLBACK_GAS_PRICE,
+        maxFeePerGas: DEFAULT_FALLBACK_GAS_PRICE,
+      },
     });
 
     const fallbackGasPrice = 100;
@@ -130,6 +143,10 @@ describe("getEthereumGasPrice", () => {
         maxFeePerGas: fallbackGasPrice,
       },
       high: {
+        maxPriorityFeePerGas: fallbackGasPrice,
+        maxFeePerGas: fallbackGasPrice,
+      },
+      asap: {
         maxPriorityFeePerGas: fallbackGasPrice,
         maxFeePerGas: fallbackGasPrice,
       },
