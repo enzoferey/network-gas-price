@@ -22,7 +22,7 @@ Gas price is constantly changing on every blockchain network based on demand to 
 1. Install the package
 
 ```sh
-yarn install @enzoferey/network-gas-price
+yarn add @enzoferey/network-gas-price
 ```
 
 2. Get network prices
