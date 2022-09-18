@@ -1,4 +1,4 @@
-export type EthereumNetwork = "ethereum" | "goerli" | "rinkeby";
+export type EthereumNetwork = "ethereum" | "goerli" | "sepolia" | "rinkeby";
 export type PolygonNetwork = "polygon" | "mumbai";
 
 export type Network = EthereumNetwork | PolygonNetwork;

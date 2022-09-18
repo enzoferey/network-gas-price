@@ -29,6 +29,16 @@ describe("getNetworkGasPrice", () => {
 
     expect(result).toBe(gasPrice);
   });
+  it("should return the Ethereum gas price for Sepolia", async () => {
+    const gasPrice = 1;
+    (getEthereumGasPrice as Mock).mockImplementationOnce(async () => {
+      return gasPrice;
+    });
+
+    const result = await getNetworkGasPrice("sepolia");
+
+    expect(result).toBe(gasPrice);
+  });
   it("should return the Ethereum gas price for Rinkeby", async () => {
     const gasPrice = 1;
     (getEthereumGasPrice as Mock).mockImplementationOnce(async () => {
@@ -83,6 +93,19 @@ describe("getNetworkGasPrice", () => {
     expect(getEthereumGasPrice).toHaveBeenCalledWith("goerli", {
       apiKey: options.etherscanApiKey,
       fallbackGasPrice: options.fallbackGasPrice.goerli,
+    });
+  });
+  it("should pass the Sepolia options", async () => {
+    const options = {
+      etherscanApiKey: "testApiKey",
+      fallbackGasPrice: { sepolia: 1 },
+    };
+
+    await getNetworkGasPrice("sepolia", options);
+
+    expect(getEthereumGasPrice).toHaveBeenCalledWith("sepolia", {
+      apiKey: options.etherscanApiKey,
+      fallbackGasPrice: options.fallbackGasPrice.sepolia,
     });
   });
   it("should pass the Rinkeby options", async () => {
