@@ -6,7 +6,12 @@ export function getNetworkGasPrice(
   network: Network,
   options: Options = {}
 ): Promise<GasPrice> {
-  if (network === "ethereum" || network === "goerli" || network === "rinkeby") {
+  if (
+    network === "ethereum" ||
+    network === "goerli" ||
+    network === "sepolia" ||
+    network === "rinkeby"
+  ) {
     return getEthereumGasPrice(network, {
       apiKey: options.etherscanApiKey,
       fallbackGasPrice: options.fallbackGasPrice?.[network],
