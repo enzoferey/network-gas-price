@@ -4,6 +4,8 @@ import type { EthereumNetwork, GasPrice } from "../types";
 // More info at https://docs.etherscan.io/support/rate-limits
 export const GAS_STATION_URL_BY_NETWORK: Record<EthereumNetwork, string> = {
   ethereum: "https://api.etherscan.io/api?module=gastracker&action=gasoracle",
+  goerli:
+    "https://api-goerli.etherscan.io/api?module=gastracker&action=gasoracle",
   rinkeby:
     "https://api-rinkeby.etherscan.io/api?module=gastracker&action=gasoracle",
 };
