@@ -6,22 +6,16 @@ export function getNetworkGasPrice(
   network: Network,
   options: Options = {}
 ): Promise<GasPrice> {
-  if (network === "ethereum" || network === "rinkeby") {
+  if (network === "ethereum" || network === "goerli" || network === "rinkeby") {
     return getEthereumGasPrice(network, {
       apiKey: options.etherscanApiKey,
-      fallbackGasPrice:
-        network === "ethereum"
-          ? options.fallbackGasPrice?.ethereum
-          : options.fallbackGasPrice?.rinkeby,
+      fallbackGasPrice: options.fallbackGasPrice?.[network],
     });
   }
 
   if (network === "polygon" || network === "mumbai") {
     return getPolygonGasPrice(network, {
-      fallbackGasPrice:
-        network === "polygon"
-          ? options.fallbackGasPrice?.polygon
-          : options.fallbackGasPrice?.mumbai,
+      fallbackGasPrice: options.fallbackGasPrice?.[network],
     });
   }
 

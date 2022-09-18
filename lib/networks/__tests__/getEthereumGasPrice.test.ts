@@ -47,6 +47,43 @@ describe("getEthereumGasPrice", () => {
       },
     });
   });
+  it("should return the Goerli gas prices per level based on the Ethereum gas station", async () => {
+    const lowGasPrice = 100;
+    const averageGasPrice = 110;
+    const fastGasPrice = 120;
+
+    const mock = mockFetch({
+      result: {
+        SafeGasPrice: lowGasPrice,
+        ProposeGasPrice: averageGasPrice,
+        FastGasPrice: fastGasPrice,
+      },
+    });
+
+    const result = await getEthereumGasPrice("goerli");
+
+    expect(mock).toHaveBeenCalledTimes(1);
+    expect(mock).toHaveBeenCalledWith(GAS_STATION_URL_BY_NETWORK.goerli);
+
+    expect(result).toEqual({
+      low: {
+        maxPriorityFeePerGas: lowGasPrice,
+        maxFeePerGas: lowGasPrice,
+      },
+      average: {
+        maxPriorityFeePerGas: averageGasPrice,
+        maxFeePerGas: averageGasPrice,
+      },
+      high: {
+        maxPriorityFeePerGas: fastGasPrice,
+        maxFeePerGas: fastGasPrice,
+      },
+      asap: {
+        maxPriorityFeePerGas: (fastGasPrice * ASAP_PERCENTAGE) / 100,
+        maxFeePerGas: (fastGasPrice * ASAP_PERCENTAGE) / 100,
+      },
+    });
+  });
   it("should return the Rinkeby gas prices per level based on the Ethereum gas station", async () => {
     const lowGasPrice = 100;
     const averageGasPrice = 110;
@@ -92,6 +129,16 @@ describe("getEthereumGasPrice", () => {
     expect(mock).toHaveBeenCalledTimes(1);
     expect(mock).toHaveBeenCalledWith(
       `${GAS_STATION_URL_BY_NETWORK.ethereum}&apiKey=testApiKey`
+    );
+  });
+  it("should include the API key if provided for Goerli", async () => {
+    const mock = mockFetch(null);
+
+    await getEthereumGasPrice("goerli", { apiKey: "testApiKey" });
+
+    expect(mock).toHaveBeenCalledTimes(1);
+    expect(mock).toHaveBeenCalledWith(
+      `${GAS_STATION_URL_BY_NETWORK.goerli}&apiKey=testApiKey`
     );
   });
   it("should include the API key if provided for Rinkeby", async () => {
