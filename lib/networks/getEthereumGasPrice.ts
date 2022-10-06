@@ -1,4 +1,5 @@
 import type { EthereumNetwork, GasPrice } from "../types";
+import { getAsapGasPriceLevel } from "../getAsapGasPriceLevel";
 
 // Note this API is rate limited if no API key is passed, we allow callers to pass theirs
 // More info at https://docs.etherscan.io/support/rate-limits
@@ -13,10 +14,10 @@ export const GAS_STATION_URL_BY_NETWORK: Record<EthereumNetwork, string> = {
 };
 
 export const DEFAULT_FALLBACK_GAS_PRICE = 80;
-export const ASAP_PERCENTAGE = 120; // 120%
 
 interface ResponseEthereumGasPrice {
   result: {
+    suggestBaseFee: number;
     SafeGasPrice: number;
     ProposeGasPrice: number;
     FastGasPrice: number;
@@ -39,31 +40,52 @@ export async function getEthereumGasPrice(
 
     const responseEthereumGasPrice = await fetch(
       apiKey !== undefined ? `${gasStationUrl}&apiKey=${apiKey}` : gasStationUrl
-    ).then<ResponseEthereumGasPrice>((response) => {
-      return response.json();
-    });
+    )
+      .then((response) => {
+        return response.json();
+      })
+      .then<ResponseEthereumGasPrice>((response) => {
+        return {
+          result: {
+            suggestBaseFee: parseFloat(response.result.suggestBaseFee),
+            SafeGasPrice: parseFloat(response.result.SafeGasPrice),
+            ProposeGasPrice: parseFloat(response.result.ProposeGasPrice),
+            FastGasPrice: parseFloat(response.result.FastGasPrice),
+          },
+        };
+      });
+
+    const lowMaxPriorityFee =
+      responseEthereumGasPrice.result.SafeGasPrice -
+      responseEthereumGasPrice.result.suggestBaseFee;
+
+    const averageMaxPriorityFee =
+      responseEthereumGasPrice.result.ProposeGasPrice -
+      responseEthereumGasPrice.result.suggestBaseFee;
+
+    const fastMaxPriorityFee =
+      responseEthereumGasPrice.result.FastGasPrice -
+      responseEthereumGasPrice.result.suggestBaseFee;
+
+    const asapGasPriceLevel = getAsapGasPriceLevel(
+      responseEthereumGasPrice.result.suggestBaseFee,
+      fastMaxPriorityFee
+    );
 
     return {
       low: {
-        maxPriorityFeePerGas: responseEthereumGasPrice.result.SafeGasPrice,
+        maxPriorityFeePerGas: lowMaxPriorityFee,
         maxFeePerGas: responseEthereumGasPrice.result.SafeGasPrice,
       },
       average: {
-        maxPriorityFeePerGas: responseEthereumGasPrice.result.ProposeGasPrice,
+        maxPriorityFeePerGas: averageMaxPriorityFee,
         maxFeePerGas: responseEthereumGasPrice.result.ProposeGasPrice,
       },
       high: {
-        maxPriorityFeePerGas: responseEthereumGasPrice.result.FastGasPrice,
+        maxPriorityFeePerGas: fastMaxPriorityFee,
         maxFeePerGas: responseEthereumGasPrice.result.FastGasPrice,
       },
-      asap: {
-        maxPriorityFeePerGas:
-          (responseEthereumGasPrice.result.FastGasPrice * ASAP_PERCENTAGE) /
-          100,
-        maxFeePerGas:
-          (responseEthereumGasPrice.result.FastGasPrice * ASAP_PERCENTAGE) /
-          100,
-      },
+      asap: asapGasPriceLevel,
     };
   } catch (error) {
     return {
