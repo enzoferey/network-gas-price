@@ -56,8 +56,7 @@ const networkGasPrice = await getNetworkGasPrice("ethereum");
 // NOTE: All prices are returned in Gwei units
 ```
 
-> 💡 The price level ("low", "average", "high", "asap") you should use depends on your type of application. Most use cases will do okay with "average" or "high". If your application has background transactions support and execution is not time critical, you could use "low". If your application has a strong need to execute transactions as soon as possible, we recommend using the
-> "asap" option that adds 20% on top of the "high" reported gas price.
+> 💡 The price level ("low", "average", "high", "asap") you should use depends on your type of application. Most use cases will do okay with "average" or "high". If your application has background transactions support and execution is not time critical, you could use "low". If your application has a strong need to execute transactions as soon as possible, we recommend using our custom "asap" option that protects against high gas prices spikes and makes the transaction attractive for miners.
 
 > 🌐 The package currently supports the Ethereum (`"ethereum"`), Polygon (`"polygon"`), Goerli (`"goerli"`), Sepolia (`"sepolia"`), Rinkeby (`"rinkeby"`), and Mumbai (`"mumbai"`) networks. If you would like to add support for a new network, please open an issue or pull request.
 
