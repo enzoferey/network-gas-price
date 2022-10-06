@@ -3,13 +3,14 @@
 ![Tests](https://github.com/enzoferey/network-gas-price/actions/workflows/test.yml/badge.svg)
 [![npm version](https://badge.fury.io/js/@enzoferey%2Fnetwork-gas-price.svg)](https://badge.fury.io/js/@enzoferey%2Fnetwork-gas-price)
 [![codecov](https://codecov.io/gh/enzoferey/network-gas-price/branch/main/graph/badge.svg?token=EJR8EAA1U8)](https://codecov.io/gh/enzoferey/network-gas-price)
+![npm bundle size](https://img.shields.io/bundlephobia/minzip/@enzoferey/network-gas-price?color=g&label=gzip%20size)
 
 Query accurate gas prices on every blockchain network ⛽️
 
 ## Highlights
 
 - Zero dependencies 🧹
-- Lightweight (749 bytes gzipped) 📦
+- Lightweight 📦
 - Simple to use ⚡️
 - Ethereum and Polygon networks 🚀
 
