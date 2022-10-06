@@ -5,28 +5,28 @@ import { mockFetch } from "./mockFetch";
 import {
   GAS_STATION_URL_BY_NETWORK,
   DEFAULT_FALLBACK_GAS_PRICE,
-  ASAP_PERCENTAGE,
   getPolygonGasPrice,
 } from "../getPolygonGasPrice";
 
+import { getAsapGasPriceLevel } from "../../getAsapGasPriceLevel";
+
 describe("getPolygonGasPrice", () => {
   it("should return the Polygon gas prices per level based on the Polygon gas station", async () => {
-    const lowGasPrice = 100;
-    const averageGasPrice = 110;
-    const fastGasPrice = 120;
+    const estimatedBaseFee = 100;
 
     const mock = mockFetch({
+      estimatedBaseFee,
       safeLow: {
-        maxPriorityFee: lowGasPrice,
-        maxFee: lowGasPrice,
+        maxPriorityFee: 0,
+        maxFee: 100,
       },
       standard: {
-        maxPriorityFee: averageGasPrice,
-        maxFee: averageGasPrice,
+        maxPriorityFee: 1,
+        maxFee: 110,
       },
       fast: {
-        maxPriorityFee: fastGasPrice,
-        maxFee: fastGasPrice,
+        maxPriorityFee: 2,
+        maxFee: 120,
       },
     });
 
@@ -37,40 +37,36 @@ describe("getPolygonGasPrice", () => {
 
     expect(result).toEqual({
       low: {
-        maxPriorityFeePerGas: lowGasPrice,
-        maxFeePerGas: lowGasPrice,
+        maxPriorityFeePerGas: 0,
+        maxFeePerGas: 100,
       },
       average: {
-        maxPriorityFeePerGas: averageGasPrice,
-        maxFeePerGas: averageGasPrice,
+        maxPriorityFeePerGas: 1,
+        maxFeePerGas: 110,
       },
       high: {
-        maxPriorityFeePerGas: fastGasPrice,
-        maxFeePerGas: fastGasPrice,
+        maxPriorityFeePerGas: 2,
+        maxFeePerGas: 120,
       },
-      asap: {
-        maxPriorityFeePerGas: (fastGasPrice * ASAP_PERCENTAGE) / 100,
-        maxFeePerGas: (fastGasPrice * ASAP_PERCENTAGE) / 100,
-      },
+      asap: getAsapGasPriceLevel(estimatedBaseFee, 2),
     });
   });
   it("should return the Mumbai gas prices per level based on the Polygon gas station", async () => {
-    const lowGasPrice = 100;
-    const averageGasPrice = 110;
-    const fastGasPrice = 120;
+    const estimatedBaseFee = 100;
 
     const mock = mockFetch({
+      estimatedBaseFee,
       safeLow: {
-        maxPriorityFee: lowGasPrice,
-        maxFee: lowGasPrice,
+        maxPriorityFee: 0,
+        maxFee: 100,
       },
       standard: {
-        maxPriorityFee: averageGasPrice,
-        maxFee: averageGasPrice,
+        maxPriorityFee: 1,
+        maxFee: 110,
       },
       fast: {
-        maxPriorityFee: fastGasPrice,
-        maxFee: fastGasPrice,
+        maxPriorityFee: 2,
+        maxFee: 120,
       },
     });
 
@@ -81,21 +77,18 @@ describe("getPolygonGasPrice", () => {
 
     expect(result).toEqual({
       low: {
-        maxPriorityFeePerGas: lowGasPrice,
-        maxFeePerGas: lowGasPrice,
+        maxPriorityFeePerGas: 0,
+        maxFeePerGas: 100,
       },
       average: {
-        maxPriorityFeePerGas: averageGasPrice,
-        maxFeePerGas: averageGasPrice,
+        maxPriorityFeePerGas: 1,
+        maxFeePerGas: 110,
       },
       high: {
-        maxPriorityFeePerGas: fastGasPrice,
-        maxFeePerGas: fastGasPrice,
+        maxPriorityFeePerGas: 2,
+        maxFeePerGas: 120,
       },
-      asap: {
-        maxPriorityFeePerGas: (fastGasPrice * ASAP_PERCENTAGE) / 100,
-        maxFeePerGas: (fastGasPrice * ASAP_PERCENTAGE) / 100,
-      },
+      asap: getAsapGasPriceLevel(estimatedBaseFee, 2),
     });
   });
   it("should return the fallback gas price if there an issue fetching from the Polygon gas station", async () => {

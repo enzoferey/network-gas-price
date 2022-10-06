@@ -1,4 +1,5 @@
 import type { GasPrice, PolygonNetwork } from "../types";
+import { getAsapGasPriceLevel } from "../getAsapGasPriceLevel";
 
 export const GAS_STATION_URL_BY_NETWORK: Record<PolygonNetwork, string> = {
   polygon: "https://gasstation-mainnet.matic.network/v2",
@@ -6,9 +7,9 @@ export const GAS_STATION_URL_BY_NETWORK: Record<PolygonNetwork, string> = {
 };
 
 export const DEFAULT_FALLBACK_GAS_PRICE = 50;
-export const ASAP_PERCENTAGE = 120; // 120%
 
 interface ResponsePolygonGasPrice {
+  estimatedBaseFee: number;
   safeLow: {
     maxPriorityFee: number;
     maxFee: number;
@@ -42,25 +43,25 @@ export async function getPolygonGasPrice(
       return response.json();
     });
 
+    const asapGasPriceLevel = getAsapGasPriceLevel(
+      responsePolygonGasPrice.estimatedBaseFee,
+      responsePolygonGasPrice.fast.maxPriorityFee
+    );
+
     return {
       low: {
         maxPriorityFeePerGas: responsePolygonGasPrice.safeLow.maxPriorityFee,
-        maxFeePerGas: responsePolygonGasPrice.safeLow.maxPriorityFee,
+        maxFeePerGas: responsePolygonGasPrice.safeLow.maxFee,
       },
       average: {
         maxPriorityFeePerGas: responsePolygonGasPrice.standard.maxPriorityFee,
-        maxFeePerGas: responsePolygonGasPrice.standard.maxPriorityFee,
+        maxFeePerGas: responsePolygonGasPrice.standard.maxFee,
       },
       high: {
         maxPriorityFeePerGas: responsePolygonGasPrice.fast.maxPriorityFee,
-        maxFeePerGas: responsePolygonGasPrice.fast.maxPriorityFee,
+        maxFeePerGas: responsePolygonGasPrice.fast.maxFee,
       },
-      asap: {
-        maxPriorityFeePerGas:
-          (responsePolygonGasPrice.fast.maxPriorityFee * ASAP_PERCENTAGE) / 100,
-        maxFeePerGas:
-          (responsePolygonGasPrice.fast.maxPriorityFee * ASAP_PERCENTAGE) / 100,
-      },
+      asap: asapGasPriceLevel,
     };
   } catch (error) {
     return {

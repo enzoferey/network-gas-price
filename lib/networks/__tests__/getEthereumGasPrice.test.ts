@@ -5,21 +5,21 @@ import { mockFetch } from "./mockFetch";
 import {
   GAS_STATION_URL_BY_NETWORK,
   DEFAULT_FALLBACK_GAS_PRICE,
-  ASAP_PERCENTAGE,
   getEthereumGasPrice,
 } from "../getEthereumGasPrice";
 
+import { getAsapGasPriceLevel } from "../../getAsapGasPriceLevel";
+
 describe("getEthereumGasPrice", () => {
   it("should return the Ethereum gas prices per level based on the Ethereum gas station", async () => {
-    const lowGasPrice = 100;
-    const averageGasPrice = 110;
-    const fastGasPrice = 120;
+    const suggestBaseFee = 100;
 
     const mock = mockFetch({
       result: {
-        SafeGasPrice: lowGasPrice,
-        ProposeGasPrice: averageGasPrice,
-        FastGasPrice: fastGasPrice,
+        suggestBaseFee: String(suggestBaseFee),
+        SafeGasPrice: "100",
+        ProposeGasPrice: "110",
+        FastGasPrice: "120",
       },
     });
 
@@ -30,33 +30,29 @@ describe("getEthereumGasPrice", () => {
 
     expect(result).toEqual({
       low: {
-        maxPriorityFeePerGas: lowGasPrice,
-        maxFeePerGas: lowGasPrice,
+        maxPriorityFeePerGas: 0,
+        maxFeePerGas: 100,
       },
       average: {
-        maxPriorityFeePerGas: averageGasPrice,
-        maxFeePerGas: averageGasPrice,
+        maxPriorityFeePerGas: 10,
+        maxFeePerGas: 110,
       },
       high: {
-        maxPriorityFeePerGas: fastGasPrice,
-        maxFeePerGas: fastGasPrice,
+        maxPriorityFeePerGas: 20,
+        maxFeePerGas: 120,
       },
-      asap: {
-        maxPriorityFeePerGas: (fastGasPrice * ASAP_PERCENTAGE) / 100,
-        maxFeePerGas: (fastGasPrice * ASAP_PERCENTAGE) / 100,
-      },
+      asap: getAsapGasPriceLevel(suggestBaseFee, 20),
     });
   });
   it("should return the Goerli gas prices per level based on the Ethereum gas station", async () => {
-    const lowGasPrice = 100;
-    const averageGasPrice = 110;
-    const fastGasPrice = 120;
+    const suggestBaseFee = 100;
 
     const mock = mockFetch({
       result: {
-        SafeGasPrice: lowGasPrice,
-        ProposeGasPrice: averageGasPrice,
-        FastGasPrice: fastGasPrice,
+        suggestBaseFee: String(suggestBaseFee),
+        SafeGasPrice: "100",
+        ProposeGasPrice: "110",
+        FastGasPrice: "120",
       },
     });
 
@@ -67,33 +63,29 @@ describe("getEthereumGasPrice", () => {
 
     expect(result).toEqual({
       low: {
-        maxPriorityFeePerGas: lowGasPrice,
-        maxFeePerGas: lowGasPrice,
+        maxPriorityFeePerGas: 0,
+        maxFeePerGas: 100,
       },
       average: {
-        maxPriorityFeePerGas: averageGasPrice,
-        maxFeePerGas: averageGasPrice,
+        maxPriorityFeePerGas: 10,
+        maxFeePerGas: 110,
       },
       high: {
-        maxPriorityFeePerGas: fastGasPrice,
-        maxFeePerGas: fastGasPrice,
+        maxPriorityFeePerGas: 20,
+        maxFeePerGas: 120,
       },
-      asap: {
-        maxPriorityFeePerGas: (fastGasPrice * ASAP_PERCENTAGE) / 100,
-        maxFeePerGas: (fastGasPrice * ASAP_PERCENTAGE) / 100,
-      },
+      asap: getAsapGasPriceLevel(suggestBaseFee, 20),
     });
   });
   it("should return the Sepolia gas prices per level based on the Ethereum gas station", async () => {
-    const lowGasPrice = 100;
-    const averageGasPrice = 110;
-    const fastGasPrice = 120;
+    const suggestBaseFee = 100;
 
     const mock = mockFetch({
       result: {
-        SafeGasPrice: lowGasPrice,
-        ProposeGasPrice: averageGasPrice,
-        FastGasPrice: fastGasPrice,
+        suggestBaseFee: String(suggestBaseFee),
+        SafeGasPrice: "100",
+        ProposeGasPrice: "110",
+        FastGasPrice: "120",
       },
     });
 
@@ -104,33 +96,29 @@ describe("getEthereumGasPrice", () => {
 
     expect(result).toEqual({
       low: {
-        maxPriorityFeePerGas: lowGasPrice,
-        maxFeePerGas: lowGasPrice,
+        maxPriorityFeePerGas: 0,
+        maxFeePerGas: 100,
       },
       average: {
-        maxPriorityFeePerGas: averageGasPrice,
-        maxFeePerGas: averageGasPrice,
+        maxPriorityFeePerGas: 10,
+        maxFeePerGas: 110,
       },
       high: {
-        maxPriorityFeePerGas: fastGasPrice,
-        maxFeePerGas: fastGasPrice,
+        maxPriorityFeePerGas: 20,
+        maxFeePerGas: 120,
       },
-      asap: {
-        maxPriorityFeePerGas: (fastGasPrice * ASAP_PERCENTAGE) / 100,
-        maxFeePerGas: (fastGasPrice * ASAP_PERCENTAGE) / 100,
-      },
+      asap: getAsapGasPriceLevel(suggestBaseFee, 20),
     });
   });
   it("should return the Rinkeby gas prices per level based on the Ethereum gas station", async () => {
-    const lowGasPrice = 100;
-    const averageGasPrice = 110;
-    const fastGasPrice = 120;
+    const suggestBaseFee = 100;
 
     const mock = mockFetch({
       result: {
-        SafeGasPrice: lowGasPrice,
-        ProposeGasPrice: averageGasPrice,
-        FastGasPrice: fastGasPrice,
+        suggestBaseFee: String(suggestBaseFee),
+        SafeGasPrice: "100",
+        ProposeGasPrice: "110",
+        FastGasPrice: "120",
       },
     });
 
@@ -141,21 +129,18 @@ describe("getEthereumGasPrice", () => {
 
     expect(result).toEqual({
       low: {
-        maxPriorityFeePerGas: lowGasPrice,
-        maxFeePerGas: lowGasPrice,
+        maxPriorityFeePerGas: 0,
+        maxFeePerGas: 100,
       },
       average: {
-        maxPriorityFeePerGas: averageGasPrice,
-        maxFeePerGas: averageGasPrice,
+        maxPriorityFeePerGas: 10,
+        maxFeePerGas: 110,
       },
       high: {
-        maxPriorityFeePerGas: fastGasPrice,
-        maxFeePerGas: fastGasPrice,
+        maxPriorityFeePerGas: 20,
+        maxFeePerGas: 120,
       },
-      asap: {
-        maxPriorityFeePerGas: (fastGasPrice * ASAP_PERCENTAGE) / 100,
-        maxFeePerGas: (fastGasPrice * ASAP_PERCENTAGE) / 100,
-      },
+      asap: getAsapGasPriceLevel(suggestBaseFee, 20),
     });
   });
   it("should include the API key if provided for Ethereum", async () => {
