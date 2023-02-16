@@ -20,10 +20,10 @@ Gas price is constantly changing on every blockchain network based on demand to 
 
 ## Getting started
 
-1. Install the package
+1. Install the package & its peer dependency
 
 ```sh
-yarn add @enzoferey/network-gas-price
+yarn add @enzoferey/network-gas-price isomorphic-unfetch
 ```
 
 2. Get network prices

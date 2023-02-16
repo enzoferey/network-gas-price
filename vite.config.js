@@ -4,26 +4,19 @@ import { defineConfig } from "vite";
 import dts from "vite-plugin-dts";
 
 export default defineConfig({
-  // Required until https://github.com/developit/unfetch/pull/164 is merged
-  resolve: {
-    alias: [
-      {
-        find: "unfetch",
-        replacement: path.resolve(
-          __dirname,
-          "node_modules",
-          "unfetch",
-          "dist",
-          "unfetch.mjs"
-        ),
-      },
-    ],
-  },
   build: {
     lib: {
       entry: path.resolve(__dirname, "lib/index.ts"),
       name: "network-gas-price",
       fileName: "network-gas-price",
+    },
+    rollupOptions: {
+      external: ["isomorphic-unfetch"],
+      output: {
+        globals: {
+          "isomorphic-unfetch": "fetch",
+        },
+      },
     },
   },
   plugins: [dts()],
