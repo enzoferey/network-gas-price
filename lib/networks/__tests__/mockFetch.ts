@@ -1,4 +1,5 @@
 import { vi, Mock } from "vitest";
+import fetch from "isomorphic-unfetch";
 
 export function mockFetch<Value>(
   mockedReturnValue: Value,
@@ -18,6 +19,10 @@ export function mockFetch<Value>(
   });
 
   vi.stubGlobal("fetch", mock);
+
+  // Redirect isomorphic-unfetch to use the mocked fetch
+  vi.mock("isomorphic-unfetch");
+  vi.mocked(fetch).mockImplementationOnce(global.fetch);
 
   return mock;
 }
