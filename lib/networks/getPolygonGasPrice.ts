@@ -1,4 +1,4 @@
-import fetch from 'cross-fetch';
+import fetch from "isomorphic-unfetch";
 import type { GasPrice, PolygonNetwork } from "../types";
 import { getAsapGasPriceLevel } from "../getAsapGasPriceLevel";
 

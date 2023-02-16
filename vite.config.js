@@ -10,6 +10,9 @@ export default defineConfig({
       name: "network-gas-price",
       fileName: "network-gas-price",
     },
+    rollupOptions: {
+      external: ["isomorphic-unfetch"],
+    },
   },
   plugins: [dts()],
   test: {

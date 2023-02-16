@@ -1,4 +1,4 @@
-import fetch from 'cross-fetch';
+import fetch from "isomorphic-unfetch";
 import type { EthereumNetwork, GasPrice } from "../types";
 import { getAsapGasPriceLevel } from "../getAsapGasPriceLevel";
 
