@@ -231,4 +231,55 @@ describe("getEthereumGasPrice", () => {
       },
     });
   });
+  it("should return the fallback gas price if there an error fetching from the Ethereum gas station", async () => {
+    mockFetch({
+      status: "0",
+      result: "Some error",
+    });
+
+    const withDefaultFallbackValue = await getEthereumGasPrice("ethereum");
+
+    expect(withDefaultFallbackValue).toEqual({
+      low: {
+        maxPriorityFeePerGas: DEFAULT_FALLBACK_GAS_PRICE,
+        maxFeePerGas: DEFAULT_FALLBACK_GAS_PRICE,
+      },
+      average: {
+        maxPriorityFeePerGas: DEFAULT_FALLBACK_GAS_PRICE,
+        maxFeePerGas: DEFAULT_FALLBACK_GAS_PRICE,
+      },
+      high: {
+        maxPriorityFeePerGas: DEFAULT_FALLBACK_GAS_PRICE,
+        maxFeePerGas: DEFAULT_FALLBACK_GAS_PRICE,
+      },
+      asap: {
+        maxPriorityFeePerGas: DEFAULT_FALLBACK_GAS_PRICE,
+        maxFeePerGas: DEFAULT_FALLBACK_GAS_PRICE,
+      },
+    });
+
+    const fallbackGasPrice = 100;
+    const withFallbackValue = await getEthereumGasPrice("ethereum", {
+      fallbackGasPrice,
+    });
+
+    expect(withFallbackValue).toEqual({
+      low: {
+        maxPriorityFeePerGas: fallbackGasPrice,
+        maxFeePerGas: fallbackGasPrice,
+      },
+      average: {
+        maxPriorityFeePerGas: fallbackGasPrice,
+        maxFeePerGas: fallbackGasPrice,
+      },
+      high: {
+        maxPriorityFeePerGas: fallbackGasPrice,
+        maxFeePerGas: fallbackGasPrice,
+      },
+      asap: {
+        maxPriorityFeePerGas: fallbackGasPrice,
+        maxFeePerGas: fallbackGasPrice,
+      },
+    });
+  });
 });
