@@ -47,6 +47,10 @@ export async function getEthereumGasPrice(
         return response.json();
       })
       .then<ResponseEthereumGasPrice>((response) => {
+        if (response.status === "0") {
+          throw new Error(response.result);
+        }
+
         return {
           result: {
             suggestBaseFee: parseFloat(response.result.suggestBaseFee),
