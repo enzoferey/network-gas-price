@@ -1,3 +1,4 @@
+import fetch from 'cross-fetch';
 import type { GasPrice, PolygonNetwork } from "../types";
 import { getAsapGasPriceLevel } from "../getAsapGasPriceLevel";
 
