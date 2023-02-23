@@ -28,7 +28,7 @@ interface ResponseEthereumGasPrice {
 
 interface EthereumOptions {
   apiKey?: string;
-  fallbackGasPrice?: number;
+  fallbackGasPrice?: number | (() => Promise<number>);
 }
 
 export async function getEthereumGasPrice(
@@ -94,22 +94,27 @@ export async function getEthereumGasPrice(
       asap: asapGasPriceLevel,
     };
   } catch (error) {
+    const gasPrice =
+      typeof fallbackGasPrice === "function"
+        ? await fallbackGasPrice()
+        : fallbackGasPrice;
+
     return {
       low: {
-        maxPriorityFeePerGas: fallbackGasPrice,
-        maxFeePerGas: fallbackGasPrice,
+        maxPriorityFeePerGas: gasPrice,
+        maxFeePerGas: gasPrice,
       },
       average: {
-        maxPriorityFeePerGas: fallbackGasPrice,
-        maxFeePerGas: fallbackGasPrice,
+        maxPriorityFeePerGas: gasPrice,
+        maxFeePerGas: gasPrice,
       },
       high: {
-        maxPriorityFeePerGas: fallbackGasPrice,
-        maxFeePerGas: fallbackGasPrice,
+        maxPriorityFeePerGas: gasPrice,
+        maxFeePerGas: gasPrice,
       },
       asap: {
-        maxPriorityFeePerGas: fallbackGasPrice,
-        maxFeePerGas: fallbackGasPrice,
+        maxPriorityFeePerGas: gasPrice,
+        maxFeePerGas: gasPrice,
       },
     };
   }

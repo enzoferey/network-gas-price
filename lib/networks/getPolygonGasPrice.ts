@@ -27,7 +27,7 @@ interface ResponsePolygonGasPrice {
 }
 
 interface PolygonOptions {
-  fallbackGasPrice?: number;
+  fallbackGasPrice?: number | (() => Promise<number>);
 }
 
 export async function getPolygonGasPrice(
@@ -66,22 +66,27 @@ export async function getPolygonGasPrice(
       asap: asapGasPriceLevel,
     };
   } catch (error) {
+    const gasPrice =
+      typeof fallbackGasPrice === "function"
+        ? await fallbackGasPrice()
+        : fallbackGasPrice;
+
     return {
       low: {
-        maxPriorityFeePerGas: fallbackGasPrice,
-        maxFeePerGas: fallbackGasPrice,
+        maxPriorityFeePerGas: gasPrice,
+        maxFeePerGas: gasPrice,
       },
       average: {
-        maxPriorityFeePerGas: fallbackGasPrice,
-        maxFeePerGas: fallbackGasPrice,
+        maxPriorityFeePerGas: gasPrice,
+        maxFeePerGas: gasPrice,
       },
       high: {
-        maxPriorityFeePerGas: fallbackGasPrice,
-        maxFeePerGas: fallbackGasPrice,
+        maxPriorityFeePerGas: gasPrice,
+        maxFeePerGas: gasPrice,
       },
       asap: {
-        maxPriorityFeePerGas: fallbackGasPrice,
-        maxFeePerGas: fallbackGasPrice,
+        maxPriorityFeePerGas: gasPrice,
+        maxFeePerGas: gasPrice,
       },
     };
   }
