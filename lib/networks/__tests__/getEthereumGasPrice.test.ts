@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 
 import { mockFetch } from "./mockFetch";
 
@@ -279,6 +279,77 @@ describe("getEthereumGasPrice", () => {
       asap: {
         maxPriorityFeePerGas: fallbackGasPrice,
         maxFeePerGas: fallbackGasPrice,
+      },
+    });
+  });
+  it("should return the fallback gas price function return value if there an issue fetching from the Ethereum gas station", async () => {
+    mockFetch(undefined, { ok: false });
+
+    const gasPrice = 100;
+
+    const fallbackGasPrice = vi.fn(async () => {
+      return gasPrice;
+    });
+
+    const withFallbackFunctionValue = await getEthereumGasPrice("ethereum", {
+      fallbackGasPrice,
+    });
+
+    expect(fallbackGasPrice).toHaveBeenCalledTimes(1);
+
+    expect(withFallbackFunctionValue).toEqual({
+      low: {
+        maxPriorityFeePerGas: gasPrice,
+        maxFeePerGas: gasPrice,
+      },
+      average: {
+        maxPriorityFeePerGas: gasPrice,
+        maxFeePerGas: gasPrice,
+      },
+      high: {
+        maxPriorityFeePerGas: gasPrice,
+        maxFeePerGas: gasPrice,
+      },
+      asap: {
+        maxPriorityFeePerGas: gasPrice,
+        maxFeePerGas: gasPrice,
+      },
+    });
+  });
+  it("should return the fallback gas price function return value if there an error fetching from the Ethereum gas station", async () => {
+    mockFetch({
+      status: "0",
+      result: "Some error",
+    });
+
+    const gasPrice = 100;
+
+    const fallbackGasPrice = vi.fn(async () => {
+      return gasPrice;
+    });
+
+    const withFallbackFunctionValue = await getEthereumGasPrice("ethereum", {
+      fallbackGasPrice,
+    });
+
+    expect(fallbackGasPrice).toHaveBeenCalledTimes(1);
+
+    expect(withFallbackFunctionValue).toEqual({
+      low: {
+        maxPriorityFeePerGas: gasPrice,
+        maxFeePerGas: gasPrice,
+      },
+      average: {
+        maxPriorityFeePerGas: gasPrice,
+        maxFeePerGas: gasPrice,
+      },
+      high: {
+        maxPriorityFeePerGas: gasPrice,
+        maxFeePerGas: gasPrice,
+      },
+      asap: {
+        maxPriorityFeePerGas: gasPrice,
+        maxFeePerGas: gasPrice,
       },
     });
   });
