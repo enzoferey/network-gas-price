@@ -17,5 +17,5 @@ export interface GasPrice {
 
 export interface Options {
   etherscanApiKey?: string;
-  fallbackGasPrice?: Partial<Record<Network, number>>;
+  fallbackGasPrice?: Partial<Record<Network, number | (() => Promise<number>)>>;
 }
