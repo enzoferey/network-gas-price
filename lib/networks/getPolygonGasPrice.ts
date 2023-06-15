@@ -4,8 +4,8 @@ import type { GasPrice, PolygonNetwork } from "../types";
 import { getAsapGasPriceLevel } from "../getAsapGasPriceLevel";
 
 export const GAS_STATION_URL_BY_NETWORK: Record<PolygonNetwork, string> = {
-  polygon: "https://gasstation-mainnet.matic.network/v2",
-  mumbai: "https://gasstation-mumbai.matic.today/v2",
+  polygon: "https://gasstation.polygon.technology/v2",
+  mumbai: "https://gasstation-testnet.polygon.technology/v2",
 };
 
 export const DEFAULT_FALLBACK_GAS_PRICE = 50;
