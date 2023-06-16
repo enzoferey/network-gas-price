@@ -91,6 +91,46 @@ describe("getPolygonGasPrice", () => {
       asap: getAsapGasPriceLevel(estimatedBaseFee, 2),
     });
   });
+  it("should parse string prices randomly returned", async () => {
+    const estimatedBaseFee = "100";
+
+    const mock = mockFetch({
+      estimatedBaseFee,
+      safeLow: {
+        maxPriorityFee: "0",
+        maxFee: "100",
+      },
+      standard: {
+        maxPriorityFee: "1",
+        maxFee: "110",
+      },
+      fast: {
+        maxPriorityFee: "2",
+        maxFee: "120",
+      },
+    });
+
+    const result = await getPolygonGasPrice("polygon");
+
+    expect(mock).toHaveBeenCalledTimes(1);
+    expect(mock).toHaveBeenCalledWith(GAS_STATION_URL_BY_NETWORK.polygon);
+
+    expect(result).toEqual({
+      low: {
+        maxPriorityFeePerGas: 0,
+        maxFeePerGas: 100,
+      },
+      average: {
+        maxPriorityFeePerGas: 1,
+        maxFeePerGas: 110,
+      },
+      high: {
+        maxPriorityFeePerGas: 2,
+        maxFeePerGas: 120,
+      },
+      asap: getAsapGasPriceLevel(parseFloat(estimatedBaseFee), 2),
+    });
+  });
   it("should return the fallback gas price if there an issue fetching from the Polygon gas station", async () => {
     mockFetch(undefined, { ok: false });
 

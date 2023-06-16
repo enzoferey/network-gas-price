@@ -41,8 +41,25 @@ export async function getPolygonGasPrice(
 
     const responsePolygonGasPrice = await fetch(
       gasStationUrl
-    ).then<ResponsePolygonGasPrice>((response) => {
-      return response.json();
+    ).then<ResponsePolygonGasPrice>(async (response) => {
+      const jsonResponse = await response.json();
+
+      // Polygon gas station types are not consistent
+      return {
+        estimatedBaseFee: parseFloat(jsonResponse.estimatedBaseFee),
+        safeLow: {
+          maxPriorityFee: parseFloat(jsonResponse.safeLow.maxPriorityFee),
+          maxFee: parseFloat(jsonResponse.safeLow.maxFee),
+        },
+        standard: {
+          maxPriorityFee: parseFloat(jsonResponse.standard.maxPriorityFee),
+          maxFee: parseFloat(jsonResponse.standard.maxFee),
+        },
+        fast: {
+          maxPriorityFee: parseFloat(jsonResponse.fast.maxPriorityFee),
+          maxFee: parseFloat(jsonResponse.fast.maxFee),
+        },
+      };
     });
 
     const asapGasPriceLevel = getAsapGasPriceLevel(
