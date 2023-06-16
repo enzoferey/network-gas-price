@@ -39,28 +39,28 @@ export async function getPolygonGasPrice(
   try {
     const gasStationUrl = GAS_STATION_URL_BY_NETWORK[network];
 
-    const responsePolygonGasPrice = await fetch(
-      gasStationUrl
-    ).then<ResponsePolygonGasPrice>(async (response) => {
-      const jsonResponse = await response.json();
-
-      // Polygon gas station types are not consistent
-      return {
-        estimatedBaseFee: parseFloat(jsonResponse.estimatedBaseFee),
-        safeLow: {
-          maxPriorityFee: parseFloat(jsonResponse.safeLow.maxPriorityFee),
-          maxFee: parseFloat(jsonResponse.safeLow.maxFee),
-        },
-        standard: {
-          maxPriorityFee: parseFloat(jsonResponse.standard.maxPriorityFee),
-          maxFee: parseFloat(jsonResponse.standard.maxFee),
-        },
-        fast: {
-          maxPriorityFee: parseFloat(jsonResponse.fast.maxPriorityFee),
-          maxFee: parseFloat(jsonResponse.fast.maxFee),
-        },
-      };
-    });
+    const responsePolygonGasPrice = await fetch(gasStationUrl)
+      .then(async (response) => {
+        return response.json();
+      })
+      .then<ResponsePolygonGasPrice>((response) => {
+        // Polygon gas station types are not consistent
+        return {
+          estimatedBaseFee: parseFloat(response.estimatedBaseFee),
+          safeLow: {
+            maxPriorityFee: parseFloat(response.safeLow.maxPriorityFee),
+            maxFee: parseFloat(response.safeLow.maxFee),
+          },
+          standard: {
+            maxPriorityFee: parseFloat(response.standard.maxPriorityFee),
+            maxFee: parseFloat(response.standard.maxFee),
+          },
+          fast: {
+            maxPriorityFee: parseFloat(response.fast.maxPriorityFee),
+            maxFee: parseFloat(response.fast.maxFee),
+          },
+        };
+      });
 
     const asapGasPriceLevel = getAsapGasPriceLevel(
       responsePolygonGasPrice.estimatedBaseFee,
